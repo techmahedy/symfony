@@ -1,0 +1,91 @@
+{% extends('base.html.twig') %}
+{% block stylesheets %}
+    <style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+{% endblock %}
+{% block body %}
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="{{ path('home') }}">CodeCheef</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="{{ path('home') }}">Home <span class="sr-only">(current)</span></a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path('job.index') }}">Jobs</a>
+      </li>
+      {# {% if is_granted('IS_AUTHENTICATED_FULLY') %} #}
+      <li class="nav-item">
+        <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+      </li>
+       <li class="nav-item">
+        <a class="nav-link" href="{{ path('register') }}">Register</a>
+      </li>
+      {# {% endif %} #}
+    </ul>
+    {% if app.user %}
+    <form class="form-inline my-2 my-lg-0">
+      <ul style="text-decoration:none;">
+        <li class="nav-item dropdown">
+        <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          {{ app.user.username }}
+        </a>
+        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+          <a class="dropdown-item" href="{{ path('app_logout') }}">Logout</a>
+          <a class="dropdown-item" href="#">Profile</a>
+        </div>
+      </li>
+      </ul>
+    </form>
+    {% endif %}
+  </div>
+</nav>
+
+<div class="container">
+<a href="{{ path('job.create') }}" class="btn btn-success" style="margin-bottom:10px;margin-top:10px; float:right;">Create Job</a>
+{% for message in app.flashes('success') %}
+    <div class="alert alert-success">
+        {{ message }}
+    </div>
+{% endfor %}
+<table>
+    <tr>
+        <th>Id</th>
+        <th>Title</th>
+        <th>Action</th>
+    </tr>
+  {% for job in jobs %}
+    <tr>
+        <td>{{ job.id }}</td>
+        <td>{{ job.title }}</td>
+        <td>
+        <a href="{{ path('job.show',{id:job.id}) }}" class="btn btn-success py-0">Show</a>
+        |
+        <a href="" class="btn btn-success py-0">Edit</a>
+        |
+        <a href="{{ path('job.delete',{id:job.id}) }}" class="btn btn-danger py-0">Delete</a>
+        </td>
+    </tr>
+  {% endfor %}
+</table>
+</div>
+
+{% endblock %}
